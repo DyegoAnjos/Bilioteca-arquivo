@@ -15,12 +15,15 @@
 		Ler um arquivo que guarda uma struct o colocando na memória, retorna o tamanho da struct-1, caso de erro ou o arquivo não tiver nada ela retorna -1
 */
 
-int ArqDeletarStc(Produtos *Struct, int tamanho, int deletar, FILE *arquivo, char *arquivoNome, char *metodo){
+int ArqDeletarStc(Produtos *Struct, int tamanho, int deletar, char *arquivoNome){
+	
+	FILE *arquivo;
+	
 	for(int i=deletar;i<=tamanho;i++){
 		Struct[i]=Struct[i+1];
 	}
 	
-	arquivo=fopen(arquivoNome, metodo);
+	arquivo=fopen(arquivoNome, "w");
 	for(int i=0;i<tamanho;i++){
 		fwrite(&Struct[i],sizeof(struct tprodutos),1,arquivo);
 	}
@@ -28,14 +31,16 @@ int ArqDeletarStc(Produtos *Struct, int tamanho, int deletar, FILE *arquivo, cha
 	tamanho--;
 	if(tamanho<0){
 		remove(arquivoNome);
-		arquivo=fopen(arquivoNome, metodo);
+		arquivo=fopen(arquivoNome,"w");
 		fclose(arquivo);
 	}
 		
 	return tamanho;
 }
 
-int ArqEscreverStc(Produtos *Struct, int tamanho, FILE *arquivo, char *arquivoNome, char *metodo){
+int ArqEscreverStc(Produtos *Struct, int tamanho, char *arquivoNome, char *metodo){
+	FILE *arquivo;
+	
 	arquivo=fopen(arquivoNome, metodo);
 	if(arquivo== NULL)
 		return -1;
@@ -48,7 +53,9 @@ int ArqEscreverStc(Produtos *Struct, int tamanho, FILE *arquivo, char *arquivoNo
 	return 1;
 }
 
-int ArqLerStc(Produtos *Struct, FILE *arquivo, char *arquivoNome){
+int ArqLerStc(Produtos *Struct, char *arquivoNome){
+	FILE *arquivo;
+	
 	int i=-1;
 	arquivo=fopen(arquivoNome, "r");
 	if(arquivo == NULL)
